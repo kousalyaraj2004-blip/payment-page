@@ -3,6 +3,7 @@
 <head>
 <title>Secure Checkout</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
 
 body{
@@ -65,11 +66,6 @@ body{
     background:linear-gradient(90deg,#f372b2,#ff4f8a);
     color:white;
     cursor:pointer;
-    font-weight:500;
-}
-
-.pay-btn:hover{
-    opacity:0.9;
 }
 
 .footer{
@@ -94,62 +90,80 @@ body{
 
 <div class="wrapper">
 
-    <div class="title">Payment Details</div>
-    <div class="pink-line"></div>
+<div class="title">Payment Details</div>
+<div class="pink-line"></div>
 
-    <div class="field-label">Amount</div>
-    <input type="number" class="input-box" id="amount"
-           placeholder="Enter amount"
-           oninput="updateButton()">
+<div class="field-label">Amount</div>
+<input type="number" class="input-box" id="amount"
+placeholder="Enter amount"
+oninput="updateButton()">
 
-    <div class="field-label">UPI ID</div>
-    <input type="text" class="input-box" id="upi"
-           placeholder="yourname@upi">
+<div class="field-label">UPI ID</div>
+<input type="text" class="input-box" id="upi"
+placeholder="yourname@upi">
 
-    <button class="pay-btn" id="payBtn" onclick="payNow()">
-        Pay ₹ 0.00
-    </button>
+<button class="pay-btn" id="payBtn" onclick="payNow()">
+Pay ₹ 0.00
+</button>
 
-    <div class="success" id="successMsg"></div>
+<div class="success" id="successMsg"></div>
 
-    <div class="footer">
-        Secured by Demo Payment Gateway
-    </div>
+<div class="footer">
+Secured by Demo Payment Gateway
+</div>
 
 </div>
 
 <script>
 
+// get return URL from query parameter
+const params = new URLSearchParams(window.location.search);
+const returnURL = params.get("returnURL");
+
 function updateButton(){
-    var amt = document.getElementById("amount").value;
-    if(amt){
-        document.getElementById("payBtn").innerHTML =
-            "Pay ₹ " + parseFloat(amt).toFixed(2);
-    } else {
-        document.getElementById("payBtn").innerHTML =
-            "Pay ₹ 0.00";
-    }
+var amt = document.getElementById("amount").value;
+
+if(amt){
+document.getElementById("payBtn").innerHTML =
+"Pay ₹ " + parseFloat(amt).toFixed(2);
+}else{
+document.getElementById("payBtn").innerHTML =
+"Pay ₹ 0.00";
+}
 }
 
 function payNow(){
-    var amt = document.getElementById("amount").value;
-    var upi = document.getElementById("upi").value;
 
-    if(amt=="" || amt<=0){
-        alert("Enter valid amount");
-        return;
-    }
+var amt = document.getElementById("amount").value;
+var upi = document.getElementById("upi").value;
 
-    if(upi==""){
-        alert("Enter UPI ID");
-        return;
-    }
+if(amt=="" || amt<=0){
+alert("Enter valid amount");
+return;
+}
 
-    var txnID = "TXN" + Math.floor(Math.random()*1000000);
+if(upi==""){
+alert("Enter UPI ID");
+return;
+}
 
-    document.getElementById("successMsg").style.display="block";
-    document.getElementById("successMsg").innerHTML =
-        "✔ Payment Successful<br>Transaction ID: " + txnID;
+var txnID = "TXN" + Math.floor(Math.random()*1000000);
+
+document.getElementById("successMsg").style.display="block";
+
+document.getElementById("successMsg").innerHTML =
+"✔ Payment Successful <br>Transaction ID: "+txnID+
+"<br>Redirecting to Application...";
+
+// redirect to pega
+setTimeout(function(){
+
+if(returnURL){
+window.location.href = returnURL;
+}
+
+},3000);
+
 }
 
 </script>
